@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Современный учебник JavaScript, ДЗ</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" type="text/css"/>
+</head>
+<body>
+  <div class="container">
+    <div class="chapter">
+      <div>
+        <h1>Глава 6: Продвинутая работа с функциями</h1>
+      </div>
+      <div class="content">
+        <div class="blocks">
+          <div class="block">
+            <p>
+              <b>Рекурсия и стек, глава 6.1</b>
+            </p>
+            <div class="block1">
+              <div>
+                <p>
+                <b>Напишите функцию sumTo(n), которая вычисляет сумму чисел 1 + 2 + ... + n.<br/>
+                  Сделайте три варианта решения:</b>
+                </p>
+                <ol>
+                  <li>С использованием цикла.</li>
+                  <li>Через рекурсию, т.к. sumTo(n) = n + sumTo(n-1) for n &mt 1.</li>
+                  <li>С использованием формулы арифметической прогрессии.</li><br/><br/>
+                </ol>
+                <p>
+                  <b>Решение с помощью цикла:</b><br/><br/>
+                  const sumTo = (n) =&gt {<br/>
+                    let sum = 0;<br/>
+                    for (let i = 1; i &lt;= n; i++) {<br/>
+                      sum += i;<br/>
+                    }<br/>
+                    return sum;<br/>
+                  }<br/><br/>
+                  <b>Решение через рекурсию:</b><br/><br/>
+                  const sumTo = (n) =&gt {<br/>
+                    return (n == 1) ?  1 : n + sumTo(n - 1);<br/>
+                  }<br/><br/>
+                  <b>С использованием формулы:</b><br/><br/>
+                  const sumTo = (n) =&gt {<br/>
+                    return n * (n + 1) / 2;<br/>
+                  }
+                </p>
+                <p>
+                  <b>Задача – написать функцию factorial(n), которая возвращает n!, используя рекурсию.</b><br/><br/>
+                </p>
+                <p>const factorial = (n) =&gt {<br/>
+                  return n ? n * factorial(n - 1) : 1;<br/>
+                }
+                </p>
+                <p>
+                  <b>Напишите функцию fib(n) которая возвращает n-е число Фибоначчи.</b><br/><br/>
+                </p>
+                <p>
+                  const fib = (n) =&gt {<br/>
+                    if (n &lt= 2) return 1;<br/>
+                    let x = 1;<br/>
+                    let y = 1;<br/>
+                    let result = 0;<br/>
+                    for (i = 2; i &lt n; i++)<br/>
+                    {<br/>
+                      result = x + y;<br/>
+                      x = y;<br/>
+                      y = result;<br/>
+                    }<br/>
+                    return result;<br/>
+                  }
+                </p>
+              </div>
+              <div>
+                <p>
+                  <b>Напишите функцию printList(list), которая выводит элементы списка по одному. Сделайте два варианта решения: используя цикл и через рекурсию.</b><br/><br/>
+                </p>
+                <p>
+                  <b>Цикл:</b><br/><br/>
+                  const printList = (list) =&gt {<br/>
+                    while (list.next != null) {<br/>
+                      list = list.next;<br/>
+                      console.log(list.value);<br/>
+                    }<br/>
+                  }
+                </p>
+                <p>
+                  <b>Рекурсия:</b><br/><br/>
+                  const printList = (list) =&gt {<br/>
+                    alert(list.value);<br/>
+                    if (list.next) {<br/>
+                      printList(list.next);<br/>
+                    }<br/>
+                  }
+                </p>
+                <p>
+                  <b>Выведите односвязный список из предыдущего задания Вывод односвязного списка в обратном порядке. Сделайте два решения: с использованием цикла и через рекурсию.</b>
+                </p>
+                <p>
+                  <b>Цикл:</b><br/><br/>
+                  const printReverseList = (list) =&gt {<br/>
+                    if (list.next) {<br/>
+                      printReverseList(list.next);<br/>
+                    }<br/>
+                    alert(list.value);<br/>
+                  }
+                </p>
+                <p>
+                  <b>Рекурсия:</b><br/><br/>
+                  const printReverseList = (list) =&gt {<br/>
+                    let arr = [];<br/>
+                    let rec = list;<br/>
+                    while (rec) {<br/>
+                      arr.push(rec.value);<br/>
+                      rec = rec.next;<br/>
+                    }<br/>
+                    for (let i = arr.length - 1; i &gt= 0; i--) {<br/>
+                      alert( arr[i] );<br/>
+                    }<br/>
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <p>
+              <b>Замыкание, глава 6.3</b>
+            </p>
+            <div class="block1">
+              <div>
+                <p><b>Здесь мы делаем два счётчика: counter и counter2, используя одну и ту же функцию makeCounter.
+                Они независимы? Что покажет второй счётчик? 0,1 или 2,3 или что-то ещё?</b><br/><br/>
+                function makeCounter() {<br/>
+                  let count = 0;<br/>
+                  return function() {<br/>
+                    return count++;<br/>
+                  };<br/>
+                }<br/><br/>
+                let counter = makeCounter();<br/>
+                let counter2 = makeCounter();<br/><br/>
+                alert( counter() ); // 0<br/>
+                alert( counter() ); // 1<br/>
+                alert( counter2() ); // ?<br/>
+                alert( counter2() ); // ?
+                </p>
+                <p>
+                <b>Здесь объект счётчика создан с помощью функции-конструктора. Будет ли он работать? Что покажет?</b><br/><br/>
+                function Counter() {<br/>
+                let count = 0;<br/>
+                this.up = function() {<br/>
+                return ++count;<br/>
+                  };<br/>
+                  this.down = function() {<br/>
+                    return --count;<br/>
+                  };<br/>
+                }<br/><br/>
+                let counter = new Counter();<br/><br/>
+                alert( counter.up() ); // ?<br/>
+                alert( counter.up() ); // ?<br/>
+                alert( counter.down() ); // ?
+                </p>
+                <p>
+                <b>Посмотрите на код. Какой будет результат у вызова на последней строке?</b><br/><br/>
+                let phrase = "Hello";<br/>
+                if (true) {<br/>
+                  let user = "John";<br/>
+                  function sayHi() {<br/>
+                    alert(`${phrase}, ${user}`);<br/>
+                  }<br/>
+                }<br/><br/>
+                sayHi();
+                </p>
+                <p>
+                <b>Напишите функцию sum, которая работает таким образом: sum(a)(b) = a+b.</b>
+                </p>
+                <p>
+                  function sum(a) {<br/>
+                    return function(b) {<br/>
+                      return a + b;<br/>
+                    };<br/>
+                  }
+                </p>
+                <p>
+                <b>Сделайте набор «готовых к употреблению» фильтров:</b><br/><br/>
+                inBetween(a, b) – между a и b (включительно).<br/>
+                inArray([...]) – находится в данном массиве.<br/><br/>
+                <b>Они должны использоваться таким образом:</b><br/><br/>
+                arr.filter(inBetween(3,6)) – выбирает только значения между 3 и 6 (включительно).<br/>
+                arr.filter(inArray([1,2,3])) – выбирает только элементы, совпадающие с одним из элементов массива
+                </p>
+                <p>
+                  function inBetween(a, b) {<br/>
+                    return function(x) {<br/>
+                      return x &gt= a && x &lt= b;<br/>
+                    };<br/>
+                }<br/><br/>
+                function inArray(arr) {<br/>
+                  return function(x) {<br/>
+                    return arr.includes(x);<br/>
+                  };<br/>
+                }
+                </p>
+              </div>
+              <div>
+                <p>
+                <b>У нас есть массив объектов, который нужно отсортировать:</b><br/><br/>
+                let users = [<br/>
+                  { name: "John", age: 20, surname: "Johnson" },<br/>
+                  { name: "Pete", age: 18, surname: "Peterson" },<br/>
+                  { name: "Ann", age: 19, surname: "Hathaway" }<br/>
+                ];<br/><br/>
+                <b>Обычный способ был бы таким:</b><br/><br/>
+                // по имени (Ann, John, Pete)<br/>
+                users.sort((a, b) =&mt a.name &mt b.name ? 1 : -1);<br/>
+                // по возрасту (Pete, Ann, John)<br/>
+                users.sort((a, b) =&mt a.age &mt b.age ? 1 : -1);<br/><br/>
+                <b>Можем ли мы сделать его короче, например вот таким?</b><br/><br/>
+                users.sort(byField('name'));<br/>
+                users.sort(byField('age'));<br/><br/>
+                То есть чтобы вместо функции мы просто писали byField(fieldName).<br/>
+                <b>Напишите функцию byField, которая может быть использована для этого.</b>
+                </p>
+                <p>
+                  const byField = (field) =&gt {<br/>
+                    return (a, b) =&gt a[field] &gt b<br/>[field] ? 1 : -1;<br/>
+                  }
+                </p>
+                <p>
+                <b>Следующий код создаёт массив из стрелков (shooters). Каждая функция предназначена выводить их порядковые номера. Но что-то пошло не так…</b><br/><br/>
+                function makeArmy() {<br/>
+                  let shooters = [];<br/>
+                  <b>let i = 0;<br/>
+                  while (i &lt 10) {</b><br/>
+                    let shooter = function() { // функция shooter<br/>
+                      alert( i ); // должна выводить порядковый номер<br/>
+                    };<br/>
+                    shooters.push(shooter);<br/>
+                    i++;<br/>
+                  }<br/>
+                  return shooters;<br/>
+                }<br/><br/>
+                let army = makeArmy();<br/>
+                army[0](); // у 0-го стрелка будет номер 10<br/>
+                army[5](); // и у 5-го стрелка тоже будет номер 10<br/>
+                // ... у всех стрелков будет номер 10, вместо 0, 1, 2, 3...<br/><br/>
+                Почему у всех стрелков одинаковые номера? Почините код, чтобы он работал как задумано.
+                </p>
+                <p>
+                  <b>Назначение номера сделано не верно, нужно заменить выделенную часть на:</b></b><br/><br/>
+                  for(let i = 0; i &lt 10; i++) {}<br/>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <p>
+              <b>Объект функции, NFE, глава 6.6</b>
+            </p>
+            <p>
+              <b>Измените код makeCounter() так, чтобы счётчик мог уменьшать и устанавливать значение:</b><br/><br/>
+                counter() должен возвращать следующее значение (как и раньше).<br/>
+                counter.set(value) должен устанавливать счётчику значение value.<br/>
+                counter.decrease() должен уменьшать значение счётчика на 1.
+            </p>
+            <p>
+              const makeCounter = () =&gt {<br/>
+                let count = 0;<br/>
+                function counter() {<br/>
+                  return count++;<br/>
+                }<br/>
+                counter.set = value =&gt count = value;<br/>
+                counter.decrease = () =&gt count--;<br/>
+                return counter;<br/>
+              }
+            </p>
+            <p>
+              <b>Напишите функцию sum, которая бы работала следующим образом:</b><br/><br/>
+              sum(1)(2) == 3; // 1 + 2<br/>
+              sum(1)(2)(3) == 6; // 1 + 2 + 3<br/>
+              sum(5)(-1)(2) == 6<br/>
+              sum(6)(-1)(-2)(-3) == 0<br/>
+              sum(0)(1)(2)(3)(4)(5) == 15<br/>
+            </p>
+            <p>
+              const sum = (a) =&gt {<br/>
+                let currentSum = a;<br/>
+                function f(b) {<br/>
+                  currentSum += b;<br/>
+                  return f;<br/>
+                }<br/>
+                f.toString = function() {<br/>
+                  return currentSum;<br/>
+                };<br/>
+                return f;<br/>
+              }
+            </p>
+          </div>
+          <div class="block">
+            <p>
+              <b>Планирование: setTimeout и setInterval, глава 6.8</b>
+            </p>
+            <p>
+              <b>Напишите функцию printNumbers(from, to), которая выводит число каждую секунду, начиная от from и заканчивая to.</b><br/><br/>
+                Сделайте два варианта решения.<br/>
+                Используя setInterval.<br/>
+                Используя рекурсивный setTimeout.
+            </p>
+            <p>
+              const printNumbers = (from, to) =&gt {<br/>
+                let current = from;<br/>
+                let timerId = setInterval(function() {<br/>
+                  alert(current);<br/>
+                  if (current == to) {<br/>
+                    clearInterval(timerId);<br/>
+                  }<br/>
+                  current++;<br/>
+                }, 1000);<br/>
+              }<br/><br/>
+              function printNumbers(from, to) {<br/>
+                let current = from;<br/>
+                setTimeout(function go() {<br/>
+                  alert(current);<br/>
+                  if (current &lt to) {<br/>
+                    setTimeout(go, 1000);<br/>
+                  }<br/>
+                  current++;<br/>
+                }, 1000);<br/>
+              }
+            </p>
+            <p>
+              <b>В приведённом ниже коде запланирован вызов setTimeout, а затем выполняется сложное вычисление, для завершения которого требуется более 100 мс.</b><br/><br/>
+              Когда будет выполнена запланированная функция?<br/>
+              Что покажет alert?
+            </p>
+            <button id="code61">Ответ</button>
+          </div>
+          <div class="block">
+            <p>
+              <b>Декораторы и переадресация вызова, call/apply, глава 6.9</b>
+            </p>
+            <p>
+              <b>Создайте декоратор spy(func), который должен возвращать обёртку, которая сохраняет все вызовы функции в своём свойстве calls. Каждый вызов должен сохраняться как массив аргументов.</b>
+            </p>
+            <p>
+              function spy(func) {<br/>
+                function wrapper(...args) {<br/>
+                  wrapper.calls.push(args);<br/>
+                  return func.apply(this, args);<br/>
+                }<br/>
+                wrapper.calls = [];<br/>
+                return wrapper;<br/>
+              }
+            </p>
+            <p>
+              <b>Создайте декоратор delay(f, ms), который задерживает каждый вызов f на ms миллисекунд.</b>
+            </p>
+            <p>
+              function delay(f, ms) {<br/>
+                return function() {<br/>
+                  setTimeout(() =&gt f.apply(this, arguments), ms);<br/>
+                };<br/>
+              }<br/>
+              let f1000 = delay(alert, 1000);<br/>
+              f1000("test");
+            </p>
+            <p>
+              <b>Результатом декоратора debounce(f, ms) должна быть обёртка, которая передаёт вызов f не более одного раза в ms миллисекунд. Другими словами, когда мы вызываем debounce, это гарантирует, что все остальные вызовы будут игнорироваться в течение ms.</b>
+            </p>
+            <p>
+              function debounce(f, ms) {<br/>
+                let isCooldown = false;<br/>
+                return function() {<br/>
+                  if (isCooldown) return;<br/>
+                  f.apply(this, arguments);<br/>
+                  isCooldown = true;<br/>
+                  setTimeout(() =&gt isCooldown = false, ms);<br/>
+                };<br/>
+              }
+            </p>
+            <p>
+              <b>Создайте «тормозящий» декоратор throttle(f, ms), который возвращает обёртку, передавая вызов в f не более одного раза в ms миллисекунд. Те вызовы, которые попадают в период «торможения», игнорируются. Отличие от debounce – если проигнорированный вызов является последним во время «задержки», то он выполняется в конце.</b>
+            </p>
+            <p>
+              function throttle(func, ms) {<br/>
+                let isThrottled = false,<br/>
+                  savedArgs,<br/>
+                  savedThis;<br/>
+                function wrapper() {<br/>
+                  if (isThrottled) {<br/>
+                    savedArgs = arguments;<br/>
+                    savedThis = this;<br/>
+                    return;<br/>
+                  }
+                  func.apply(this, arguments);<br/>
+                  isThrottled = true;
+                  setTimeout(function() {
+                    isThrottled = false;<br/>
+                    if (savedArgs) {<br/>
+                      wrapper.apply(savedThis, savedArgs);<br/>
+                      savedArgs = savedThis = null;<br/>
+                    }<br/>
+                  }, ms);<br/>
+                }<br/>
+                return wrapper;<br/>
+              }
+            </p>
+          </div>
+          <div class="block">
+            <p>
+              <b>Привязка контекста к функции, глава 6.10</b>
+            </p>
+            <p>
+            <p>
+              <b>Что выведет функция?</b><br/><br/>
+              function f() {<br/>
+                alert( this ); // ?<br/>
+              }<br/>
+              let user = {<br/>
+                g: f.bind(null)<br/>
+              };<br/><br/>
+              user.g();
+            </p>
+            <p>
+              <b>Можем ли мы изменить this дополнительным связыванием?</b><br/>
+              Что выведет этот код?<br/><br/>
+              function f() {<br/>
+                alert(this.name);<br/>
+              }<br/>
+              f = f.bind( {name: "Вася"} ).bind( {name: "Петя" } );<br/><br/>
+              f();
+            </p>
+            <p>
+              <b>В свойство функции записано значение. Изменится ли оно после применения bind? Обоснуйте ответ.</b><br/><br/>
+              function sayHi() {<br/>
+                alert( this.name );<br/>
+              }<br/>
+              sayHi.test = 5;<br/><br/>
+              let bound = sayHi.bind({<br/>
+                name: "Вася"<br/>
+              });<br/><br/>
+              alert( bound.test ); // что выведет? почему?
+            </p>
+            <p>
+              <b>Вызов askPassword() в приведённом ниже коде должен проверить пароль и затем вызвать user.loginOk/loginFail в зависимости от ответа. Однако, его вызов приводит к ошибке. Почему? Исправьте выделенную строку, чтобы всё работало (других строк изменять не надо).</b><br/><br/>
+              function askPassword(ok, fail) {<br/>
+                let password = prompt("Password?", '');<br/>
+                if (password == "rockstar") ok();<br/>
+                else fail();<br/>
+              }<br/>
+              let user = {<br/>
+                name: 'Вася',<br/>
+                loginOk() {<br/>
+                  alert(`${this.name} logged in`);<br/>
+                },<br/>
+                loginFail() {<br/>
+                  alert(`${this.name} failed to log in`);<br/>
+                },<br/>
+              };<br/>
+              <b>askPassword(user.loginOk, user.loginFail);</b>
+            </p>
+            <p>
+              <b>Объект user был изменён. Теперь вместо двух функций loginOk/loginFail у него есть только одна – user.login(true/false). Что нужно передать в вызов функции askPassword в коде ниже, чтобы она могла вызывать функцию user.login(true) как ok и функцию user.login(false) как fail?</b><br/><br/>
+              function askPassword(ok, fail) {<br/>
+                let password = prompt("Password?", '');<br/>
+                if (password == "rockstar") ok();<br/>
+                else fail();<br/>
+              }<br/><br/>
+              let user = {<br/>
+                name: 'John',<br/>
+                login(result) {<br/>
+                  alert( this.name + (result ? ' logged in' : ' failed to log in') );<br/>
+                }<br/>
+              };<br/>
+              <b>askPassword(?, ?); // ?</b>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter">
+      <div>
+        <h1>Глава 8: Прототипы, наследование</h1>
+      </div>
+      <div class="content">
+        <div class="blocks">
+          <div class="block">
+            <p>
+              <b>Прототипное наследование, глава 8.1</b>
+            </p>
+            <div class="block1">
+              <div>
+                <p>
+                  <b>В приведённом ниже коде создаются и изменяются два объекта. Какие значения показываются в процессе выполнения кода?</b><br/><br/>
+                  let animal = {<br/>
+                    jumps: null<br/>
+                  };<br/>
+                  let rabbit = {<br/>
+                    __proto__: animal,<br/>
+                    jumps: true<br/>
+                  };<br/>
+                  alert( rabbit.jumps ); // ? (1)<br/>
+                  delete rabbit.jumps;<br/>
+                  alert( rabbit.jumps ); // ? (2)<br/>
+                  delete animal.jumps;<br/>
+                  alert( rabbit.jumps ); // ? (3)<br/><br/>
+                  Должно быть 3 ответа.
+                </p>
+                <button id="code81">Смотреть ответ</button>
+                <p>
+                  <b>С помощью свойства __proto__ задайте прототипы так, чтобы поиск любого свойства выполнялся по следующему пути: pockets → bed → table → head. Например, pockets.pen должно возвращать значение 3 (найденное в table), а bed.glasses – значение 1 (найденное в head). Ответьте на вопрос: как быстрее получить значение glasses – через pockets.glasses или через head.glasses? При необходимости составьте цепочки поиска и сравните их.</b><br/><br/>
+                  let head = {<br/>
+                    glasses: 1<br/>
+                  };<br/>
+                  let table = {<br/>
+                    pen: 3<br/>
+                  };<br/>
+                  let bed = {<br/>
+                    sheet: 1,<br/>
+                    pillow: 2<br/>
+                  };<br/>
+                  let pockets = {<br/>
+                    money: 2000<br/>
+                  };
+                </p>
+                <p>
+                  <b>Добавить proto в нужных местах:</b><br/><br/>
+                  let table = {<br/>
+                    pen: 3,<br/>
+                    __proto__: head<br/>
+                  };<br/><br/>
+                  let bed = {<br/>
+                    sheet: 1,<br/>
+                    pillow: 2,<br/>
+                    __proto__: table<br/>
+                  };<br/><br/>
+                  let pockets = {<br/>
+                    money: 2000,<br/>
+                    __proto__: bed<br/>
+                  };<br/><br/>
+                  <b>Разницы в способе поиска нет.</b>
+                </p>
+              </div>
+              <div>
+                <p>
+                  <b>Объект rabbit наследует от объекта animal. Какой объект получит свойство full при вызове rabbit.eat(): animal или rabbit?</b><br/><br/>
+                  let animal = {<br/>
+                    eat() {<br/>
+                      this.full = true;<br/>
+                    }<br/>
+                  };<br/>
+                  let rabbit = {<br/>
+                    __proto__: animal<br/>
+                  };<br/>
+                  rabbit.eat();
+                </p>
+                <p>
+                  <b>У нас есть два хомяка: шустрый (speedy) и ленивый (lazy); оба наследуют от общего объекта hamster. Когда мы кормим одного хомяка, второй тоже наедается. Почему? Как это исправить?</b><br/><br/>
+                  let hamster = {<br/>
+                    stomach: [],<br/>
+                    eat(food) {<br/>
+                      <b>this.stomach.push(food);</b><br/>
+                    }<br/>
+                  };<br/>
+                  let speedy = {<br/>
+                    __proto__: hamster<br/>
+                  };<br/>
+                  let lazy = {<br/>
+                    __proto__: hamster<br/>
+                  };<br/>
+                  // Этот хомяк нашёл еду<br/>
+                  speedy.eat("apple");<br/><br/>
+                  alert( speedy.stomach ); // apple<br/>
+                  // У этого хомяка тоже есть еда. Почему? Исправьте<br/>
+                  alert( lazy.stomach ); // apple
+                </p>
+                <p>
+                  Выделенный метод написан не верно, мы пушим еду в один желудок. Нужно исправить на:<br/><br/>
+                  this.stomach = [food];
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <p>
+              <b>F.prototype, глава 8.2</b>
+            </p>
+            <p>
+              <b>В коде ниже мы создаём нового кролика new Rabbit, а потом пытаемся изменить его прототип. Сначала у нас есть такой код:</b><br/><br/>
+              function Rabbit() {}<br/>
+              Rabbit.prototype = {<br/>
+                eats: true<br/>
+              };<br/><br/>
+              let rabbit = new Rabbit();<br/>
+              alert( rabbit.eats ); // true<br/><br/>
+              <b>1 Добавим одну строчку (выделенную в коде ниже). Что вызов alert покажет нам сейчас?</b><br/><br/>
+              function Rabbit() {}<br/>
+              Rabbit.prototype = {<br/>
+                eats: true<br/>
+              };<br/>
+              let rabbit = new Rabbit();<br/>
+              Rabbit.prototype = {};<br/><br/>
+              alert( rabbit.eats ); // ?<br/><br/>
+              <b>2 …А если код такой (заменили одну строчку)?</b><br/><br/>
+              function Rabbit() {}<br/>
+              Rabbit.prototype = {<br/>
+                eats: true<br/>
+              };<br/><br/>
+              let rabbit = new Rabbit();<br/>
+              Rabbit.prototype.eats = false;<br/><br/>
+              alert( rabbit.eats ); // ?<br/><br/>
+              <b>3 Или такой (заменили одну строчку)?</b><br/><br/>
+              function Rabbit() {}<br/>
+              Rabbit.prototype = {<br/>
+                eats: true<br/>
+              };<br/><br/>
+              let rabbit = new Rabbit();<br/>
+              delete rabbit.eats;<br/><br/>
+              alert( rabbit.eats ); // ?<br/><br/>
+              <b>4 Или, наконец, такой:</b><br/><br/>
+              function Rabbit() {}<br/>
+              Rabbit.prototype = {<br/>
+                eats: true<br/>
+              };<br/><br/>
+              let rabbit = new Rabbit();<br/>
+              delete Rabbit.prototype.eats;<br/>
+              alert( rabbit.eats ); // ?<br/><br/>
+            </p>
+            <div class="btn1">
+              <button id="code82">Смотреть ответ 1</button>
+              <button id="code83">Смотреть ответ 2</button>
+              <button id="code84">Смотреть ответ 3</button>
+              <button id="code85">Смотреть ответ 4</button>
+            </div>
+            <p>
+              <b>Представьте, что у нас имеется некий объект obj, созданный функцией-конструктором – мы не знаем какой именно, но хотелось бы создать ещё один объект такого же типа. Можем ли мы сделать так?</b><br/><br/>
+              let obj2 = new obj.constructor();<br/><br/>
+              Приведите пример функции-конструктора для объекта obj, с которой такой вызов корректно сработает. И пример функции-конструктора, с которой такой код поведёт себя неправильно.
+            </p>
+            <p>
+              const Obj (str) {<br/>
+                this.str = str;<br/>
+              }<br/>
+              <b>Obj.prototype = {};</b><br/>
+              let obj = new Obj('Alina');<br/>
+              let obj2 = new obj.constructor('Natalya');<br/>
+              alert( obj2.str );
+            </p>
+            <p>При перезаписи - Obj.prototype - может возникнуть ошибка</p>
+          </div>
+          <div class="block">
+            <p>
+              <b>Встроенные прототипы, глава 8.3</b>
+            </p>
+            <p>
+              <b>Добавьте всем функциям в прототип метод defer(ms), который вызывает функции через ms миллисекунд.</b>
+            </p>
+            <p>
+              Function.prototype.defer = function(ms) {
+                setTimeout(this, ms);
+              };
+              function f() {
+                alert("Hello!");
+              }
+              f.defer(1000);
+            </p>
+            <p>
+              <b>Добавьте всем функциям в прототип метод defer(ms), который возвращает обёртку, откладывающую вызов функции на ms миллисекунд.</b>
+            </p>
+            <p>
+              Function.prototype.defer = function (ms) {
+                return (...args) =&gt setTimeout(this, ms, ...args);
+                };
+            </p>
+          </div>
+          <div class="block">
+            <p>
+              <b>Методы прототипов, объекты без свойства __proto__, глава 8.4</b>
+            </p>
+            <p>
+              <b>Имеется объект dictionary, созданный с помощью Object.create(null) для хранения любых пар ключ/значение. Добавьте ему метод dictionary.toString(), который должен возвращать список ключей, разделённых запятой. Ваш toString не должен выводиться при итерации объекта с помощью цикла for..in.</b>
+            </p>
+            <p>
+              let dictionary = Object.create(null, {<br/>
+                toString: { // определяем свойство toString<br/>
+                  value() {<br/>
+                    return Object.keys(this).join();<br/>
+                  }<br/>
+                }<br/>
+              });
+            </p>
+            <p>
+              <b>Давайте создадим новый объект rabbit:</b><br/><br/>
+              function Rabbit(name) {<br/>
+                this.name = name;<br/>
+              }<br/>
+              Rabbit.prototype.sayHi = function() {<br/>
+                alert(this.name);<br/>
+              };<br/><br/>
+              let rabbit = new Rabbit("Rabbit");<br/><br/>
+              <b>Все эти вызовы делают одно и тоже или нет?</b><br/><br/>
+              rabbit.sayHi();<br/>
+              Rabbit.prototype.sayHi();<br/>
+              Object.getPrototypeOf(rabbit).sayHi();<br/>
+              rabbit.__proto__.sayHi();
+            </p>
+            <button id="code86">Ответ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter">
+      <div>
+        <h1>Документ</h1>
+      </div>
+      <div class="content">
+        <div class="blocks">
+          <div class="block">
+            <p>
+              <b>Навигация по DOM-элементам, глава 1.3</b>
+            </p>
+            <p>
+              <b>Для страницы:</b><br/><br/>
+                html<br/>
+                body<br/>
+                  div Пользователи: /div<br/>
+                  ul<br/>
+                    li Джон /li<br/>
+                    li Пит /li<br/>
+                  /ul<br/>
+                /body<br/>
+                /html<br/><br/>
+                Напишите код, как получить…<br/><br/>
+                элемент div? =&gt document.body.firstElementChild<br/>
+                ul? =&gt document.body.lastElementChild<br/>
+                второй li (с именем Пит)? =&gt document.body.lastElementChild.lastElementChild<br/>
+            </p>
+            <p>
+              <b>Если elem – произвольный узел DOM-элемента…</b><br/><br/>
+              <ul>
+                <li>Правда, что elem.lastChild.nextSibling всегда равен null?</li>
+                <li>Правда, что elem.children[0].previousSibling всегда равен null ?</li>
+              </ul>
+            </p>
+            <p>
+              elem.lastChild - обращение к последнему ребенку у него не может быть следующего соседа - nextSibling.<br/><br/>
+              elem.children[0] - перед ним могут быть другие узлы, соответственно утверждение не верно.
+            </p>
+            <p>
+              <b>Напишите код, который выделит красным цветом все ячейки в таблице по диагонали.</b>
+            </p>
+            <p>
+              let tabe = document.body.firstElementChild;<br/><br/>
+              for (let i = 0; i &lt tabe.rows.length; i++) {<br/>
+                let row = table.rows[i];<br/>
+                row.cells[i].style.backgroundColor = 'red';<br/>
+              }
+            </p>
+          </div>
+          <div class="block">
+            <p>
+              <b>Поиск: getElement*, querySelector*, глава 1.4</b>
+            </p>
+            <p>
+              <b>Как найти?…</b><br/><br/>
+              <ol>
+                <li>Таблицу с id="age-table" ==&gt let table = document.getElementById('age-table')</li>
+                <li>Все элементы label внутри этой таблицы (их три) ==&gt document.querySelectorAll('#age-table label')</li>
+                <li>Первый td в этой таблице (со словом «Age») ==&gt table.querySelector('td')</li>
+                <li>Форму form с именем name="search" ==&gt document.querySelector('form[name="search"]')</li>
+                <li>Первый input в этой форме ==&gt form.querySelector('input')</li>
+                <li>Последний input в этой форме ==&gt let i = form.querySelectorAll('input') i[i.length-1]</li>
+              </ol>
+            </p>
+          </div>
+          <div class="block">
+            <p>
+              <b>Свойства узлов: тип, тег и содержимое, глава 1.5</b>
+            </p>
+            <p>
+              <b>Напишите код, который выведет каждый элемент списка &ltli&gt:</b><br/><br/>
+                <ol>
+                  <li>Какой в нём текст (без поддерева) ?</li>
+                  <li>Какое число потомков – всех вложенных <li> (включая глубоко вложенные) ?</li>
+                </ol>
+            </p>
+            <p>
+              for (let li of document.querySelectorAll('li')) { // перебираем<br/>
+                let title = li.firstChild.data; // смотрим название<br/>
+                let count = li.getElementsByTagName('li').length;// смотрим количество потомков<br/>
+              }
+            </p>
+            <p>
+              <b>Что выведет этот код?</b><br/><br/>
+              html<br/>
+              body<br/>
+                script<br/>
+                  alert(document.body.lastChild.nodeType);<br/>
+                /script<br/>
+              /body<br/>
+              /html<br/>
+            </p>
+            <p>
+              Ответ зависит от очередности выполнения скрипта - до кода или после.
+            </p>
+            <p>
+              <b>Что выведет этот код?</b><br/><br/>
+              script<br/>
+                let body = document.body;<br/>
+                body.innerHTML = "&lt!--" + body.tagName + "--&gt";<br/><br/>
+                alert( body.firstChild.data ); // что выведет?<br/>
+              /script
+            </p>
+            <button id="code1">Узнать ответ</button>
+            <p>
+              <ol>
+                <li>Объектом какого класса является document?</li>
+                <li>Какое место он занимает в DOM-иерархии?</li>
+                <li>Наследует ли он от Node или от Element, или может от HTMLElement?</li>
+              </ol>
+            </p>
+            <ol>
+              <li>HTMLDocument</li>
+              <li>Node =&gt Document =&gt HTMLDocument</li>
+            </ol>
+          </div>
+          <div class="block">
+            <p>
+              <b>Атрибуты и свойства, глава 1.6</b>
+            </p>
+            <p>
+              <b>Напишите код для выбора элемента с атрибутом data-widget-name и прочитайте его значение.</b><br/>
+            </p>
+            <p>
+              let elem = document.querySelector('[data-widget-name]'); // получаем<br/>
+              alert(elem.dataset.widgetName); // читаем
+            </p>
+            <p>
+              <b>Сделайте все внешние ссылки оранжевыми, изменяя их свойство style.</b><br/>
+            </p>
+            <p>
+              let selector = 'a[href*="://"]:not([href^="http://internal.com"])'; // выбираем только внешние<br/>
+              let links = document.querySelectorAll(selector); // обращаемся к ним<br/> 
+              links.forEach(link =&gt link.style.color = 'orange'); // красим<br/> 
+            </p>
+          </div>
+          <div class="block">
+            <p>
+              <b>Изменение документа, глава 1.7</b>
+            </p>
+            <p>
+              <b>У нас есть пустой DOM-элемент elem и строка text. Какие из этих 3-х команд работают одинаково?</b><br/>
+              <ol>
+                <li>elem.append(document.createTextNode(text))</li>
+                <li>elem.innerHTML = text</li>
+                <li>elem.textContent = text</li>
+              </ol>
+            </p>
+            <p>
+              <b>Первая и третья</b>
+            </p>
+            <p>
+              <b>Создайте функцию clear(elem), которая удаляет всё содержимое из elem.</b><br/>
+            </p>
+            <p>const clear = (elem) =&gt elem.innerHTML = '';</p>
+            <p>
+              <b>В примере ниже вызов table.remove() удаляет таблицу из документа. Но если вы запустите его, вы увидите, что текст "aaa" все еще виден. Почему так происходит?</b><br/><br/>
+              table id="table"<br/>
+                aaa<br/>
+                tr<br/>
+                  td Тест /td<br/>
+                /tr<br/>
+              /table<br/>
+              script<br/>
+                alert(table); // таблица, как и должно быть<br/>
+                table.remove();<br/>
+              /script
+            </p>
+            <p>Текст написан внутри тэга table, а это не верно, отсюда и его игнорирование во время удаления таблицы</p>
+            <p>
+              <b>Напишите интерфейс для создания списка.</b><br/>
+            </p>
+            <p>
+              let ul = document.createElement('ul');<br/>
+              document.body.append(ul);<br/>
+              while (true) {<br/>
+                let paragraph = prompt("Введите необходимый пункт списка", "");<br/>
+                if (!paragraph) {<br/>
+                  break;<br/>
+                }<br/><br/>
+                let li = document.createElement('li');<br/>
+                li.textContent = paragraph;<br/>
+                ul.append(li);<br/>
+              }
+            </p>
+            <p>
+              <b>Напишите функцию createTree, которая создаёт вложенный список ul/li из объекта.</b><br/>
+            </p>
+            <p>
+              const createTree = (elem, obj) =&gt elem.innerHTML = createTreeOl(obj);<br/><br/>
+              const createTreeOl = (obj) =&gt {<br/>
+                let li = '';<br/>
+                let ul;<br/>
+                for (let key in obj) {<br/>
+                  li += '&ltli&gt' + key + createTreeOl(obj[key]) + '&lt/li&gt';<br/>
+                }<br/>
+                if (li) {<br/>
+                  ul = '&ltul&gt' + li + '&lt/ul&gt'<br/>
+                }<br/>
+                return ul || '';<br/>
+              }<br/><br/>
+              createTree(elem, data);
+            </p>
+            <p>
+              <b>Есть дерево, организованное в виде вложенных списков ul/li. Напишите код, который добавит каждому элементу списка &ltli&gt количество вложенных в него элементов. Узлы нижнего уровня, без детей – пропускайте.</b>
+            </p>
+            <p>
+              let add = document.getElementsByTagName('li');
+              for (let li of add) {
+                let count = li.getElementsByTagName('li').length;
+                if (!count) continue;
+                li.firstChild.data += ' [' + count + ']';
+              }
+            </p>
+            <p>
+              <b>Напишите функцию createCalendar(elem, year, month). Вызов функции должен создать календарь для заданного месяца month в году year и вставить его в elem. Календарь должен быть таблицей, . У таблицы должен быть заголовок с названиями дней недели.</b>
+            </p>
+            <div class="calendar" id="calendar"></div>
+            <button id="code2">Создать календарик</button>
+            <p>
+              <b>Создайте цветные часы</b>
+            </p>
+            <div class="clock">
+              <div id="id_clock"></div>
+              <div id="time" style="font-weight: bold;"> 
+                <span id="id_H" style="color: red;"></span> : <span id="id_M" style="color: green;"></span> : <span id="id_S" style="color:blue;" ></span>    
+              </div>
+            </div>
+            <p>
+              <b>Напишите код для вставки 2 и 3 между  двумя 1 и 4</b>
+            </p>
+            <p>
+              one.insertAdjacentHTML('afterend', '&ltli&gt2&lt/li&gt&ltli&gt3&lt/li&gt');
+            </p>
+            <p>
+              <b>Напишите код для сортировки таблицы по столбцу "name".</b>
+            </p>
+            <p>
+              let sorted = Array.from(table.rows)
+              .slice(1)
+              .sort((rowA, rowB) =&gt rowA.cells[0].innerHTML &gt rowB.cells[0].innerHTML ? 1 : -1);
+              table.tBodies[0].append(...sortedRows);
+            </p>
+          </div>
+          <div class="block">
+            <p>
+              <b>Стили и классы, глава 1.8</b>
+            </p>
+            <p>
+              <b>Напишите функцию showNotification(options), которая создаёт уведомление: &ltdiv class="notification"&gt с заданным содержимым. Уведомление должно автоматически исчезнуть через 1,5 секунды.</b><br/><br/>
+            </p>
+            <div class="btn1">
+              <button id="code3">Смотреть</button>
+            </div>
+          </div>
+          
+          <div class="block">
+            <p>
+              <b>Размеры и прокрутка элементов, глава 1.9</b>
+            </p>
+            <p>
+              <b>Свойство elem.scrollTop содержит размер прокрученной области при отсчёте сверху. А как подсчитать размер прокрутки снизу (назовём его scrollBottom)? Напишите соответствующее выражение для произвольного элемента elem. Проверьте: если прокрутки нет вообще или элемент полностью прокручен – оно должно давать 0.</b><br/>
+            </p>
+            <p>let scrollBottom = elem.scrollHeight - elem.scrollTop - elem.clientHeight;</p>
+            <p>
+              <b>Напишите код, который возвращает ширину стандартной полосы прокрутки. Для Windows она обычно колеблется от 12px до 20px. Если браузер не выделяет место под полосу прокрутки (так тоже бывает, она может быть прозрачной над текстом), тогда значение может быть 0px. Ваш код должен работать в любом HTML-документе, независимо от его содержимого.</b>
+            </p>
+            <p>
+              let div = document.createElement('div');
+              div.style.overflowY = 'scroll';
+              div.style.width = '50px';
+              div.style.height = '50px';
+              // мы должны вставить элемент в документ, иначе размеры будут равны 0
+              document.body.append(div);
+              let scrollWidth = div.offsetWidth - div.clientWidth;
+              div.remove();
+              alert(scrollWidth);
+            </p>
+            <p>
+              <b>Вычислите координаты центра поля и используйте их, чтобы поместить мяч в центр поля.</b>
+            </p>
+            <p>
+              let ball_posY = (field.clientHeight - ball.clientHeight)/2;
+              let ball_posX = (field.clientWidth - ball.clientWidth)/2;
+              Дополнительно нкжно учесть размер мяча, так как это важно при центрировании.
+            </p>
+            <p>
+              <b>В чём отличие между getComputedStyle(elem).width и elem.clientWidth?</b>
+            </p>
+            <ol>
+              <li>elem.clientWidth вычисляется вместе с padding, а getComputedStyle(elem).width padding.</li>
+              <li>elem.clientWidth - это число, а getComputedStyle(elem).width – строка.</li>
+              <li>getComputedStyle(elem).width помимо фиксированных данных может вернуть auto.</li>
+            </ol>
+          </div>
+          <div class="block">
+            <p>
+              <b>Координаты, глава 1.11</b>
+            </p>
+            <p>
+              <b><a href="https://learn.javascript.ru/coordinates">В ифрейме</a> располагается документ с зелёным «полем». Используйте JavaScript, чтобы найти координаты углов, обозначенных стрелками.</b><br/>
+            </p>
+            <p>
+              <b>Внешние углы</b><br/><br/>
+              let coords = elem.getBoundingClientRect();<br/>
+              let answer1 = [coords.left, coords.top];<br/>
+              let answer2 = [coords.right, coords.bottom];<br/><br/>
+              <b>Верхний левый внутренний угол</b><br/><br/>
+              let answer3 = [coords.left + field.clientLeft, coords.top + field.clientTop];<br/><br/>
+              <b>Нижний правый внутренний угол</b><br/><br/>
+              let answer4 = [<br/>
+              coords.left + elem.clientLeft + elem.clientWidth,<br/>
+              coords.top + elem.clientTop + elem.clientHeight<br/>
+            ];
+            </p>
+            <p>
+              <b>Создайте функцию positionAt(anchor, position, elem), которая позиционирует элемент elem в зависимости от значения свойства position рядом с элементом anchor.</b>
+            </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              esse sequi officia sapiente.</p>
+          
+            <blockquote>
+              Teacher: Why are you late?
+              Student: There was a man who lost a hundred dollar bill.
+              Teacher: That's nice. Were you helping him look for it?
+              Student: No. I was standing on it.
+            </blockquote>
+          
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              esse sequi officia sapiente.</p>
+            <button id="code4">Показать</button>
+            <p>
+              <b>Измените код решения предыдущего задания так, чтобы элемент заметки использовал свойство position:absolute вместо position:fixed.</b>
+            </p>
+            <p>Необходимо заменить position:fixed на position:absolute в CSS</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter">
+      <div>
+        <h1>Введение в события</h1>
+      </div>
+      <div class="content">
+        <div class="blocks">
+          <div class="block">
+            <p>
+              <b>Введение в браузерные события, глава 1.1</b>
+            </p>
+            <p>
+              <b>Добавьте JavaScript к кнопке button, чтобы при нажатии элемент &ltdiv id="text"&gt исчезал.</b><br/><br/>
+            </p>
+            <button id="code5">Скрыть текст</button>
+            <p id="text">Я пошёл</p>
+            <p>
+              <b>Создайте кнопку, которая будет скрывать себя по нажатию.</b>
+            </p>
+            <button id="code6">Спрятать</button>
+            <p>
+              <b>В переменной button находится кнопка. Изначально на ней нет обработчиков. Который из обработчиков запустится? Что будет выведено при клике после выполнения кода?</b>
+            </p>
+            <button id="code7">Смотреть решение</button>
+            <p>
+              <b>Пусть <a href="https://learn.javascript.ru/introduction-browser-events">мяч</a> перемещается при клике на поле, туда, куда был клик</b>
+            </p>
+            <p>
+              field.onclick = function(event) {<br/>
+                let fieldCoords = this.getBoundingClientRect();<br/>
+                let ballCoords = {<br/>
+                  top: event.clientY - fieldCoords.top - field.clientTop - ball.clientHeight / 2,<br/>
+                  left: event.clientX - fieldCoords.left - field.clientLeft - ball.clientWidth / 2<br/>
+                };<br/>
+                if (ballCoords.top &lt 0) ballCoords.top = 0;<br/>
+                if (ballCoords.left &lt 0) ballCoords.left = 0;<br/>
+                if (ballCoords.left + ball.clientWidth &gt field.clientWidth) {<br/>
+                  ballCoords.left = field.clientWidth - ball.clientWidth;<br/>
+                }<br/>
+                if (ballCoords.top + ball.clientHeight &gt field.clientHeight) {<br/>
+                  ballCoords.top = field.clientHeight - ball.clientHeight;<br/>
+                }<br/>
+                ball.style.left = ballCoords.left + 'px';<br/>
+                ball.style.top = ballCoords.top + 'px';<br/>
+              }
+            </p>
+            <p>
+              <b>Создать меню, которое по нажатию открывается либо закрывается:</b>
+            </p>
+            <div id="menu" class="menu">
+              <p>
+                <span class="title">Тут много чего есть</span>
+                <ol>
+                  <li>Это</li>
+                  <li>Это</li>
+                  <li>И даже это</li>
+                </ol>
+              </p>
+            </div>
+            <p>
+              <b>При помощи JavaScript добавьте в верхний правый угол кнопку закрытия.</b>
+            </p>
+            <div>
+              <div class="hidden__block">
+                <button class="block__btn">X</button>
+                <h3 class="block__title">Текст, который нужно спрятать</h3>
+                <p class="block__text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam aperiam debitis dolorem dignissimos fugiat architecto vitae perspiciatis assumenda harum maiores, laboriosam impedit illum sunt temporibus libero provident, consectetur, magni tempore.</p>
+              </div>
+            </div>
+            <p>
+              <b>Создайте «Карусель» –- ленту изображений, которую можно листать влево-вправо нажатием на стрелочки.</b>
+            </p>
+            <div class="slideshow-container">
+              <div class="mySlides fade">
+                <div class="numbertext">1 / 3</div>
+                <img src="/images/1.jpg" style="width:100%">
+                <div class="text">Caption Text</div>
+              </div>
+              <div class="mySlides fade">
+                <div class="numbertext">2 / 3</div>
+                <img src="/images/2.jfif" style="width:100%">
+                <div class="text">Caption Two</div>
+              </div>
+              <div class="mySlides fade">
+                <div class="numbertext">3 / 3</div>
+                <img src="/images/3.jfif" style="width:100%">
+                <div class="text">Caption Three</div>
+              </div>
+              <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+              <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+            <br>
+            <div style="text-align:center">
+              <span class="dot" onclick="currentSlide(1)"></span>
+              <span class="dot" onclick="currentSlide(2)"></span>
+              <span class="dot" onclick="currentSlide(3)"></span>
+            </div>
+          </div>
+          <div class="block">
+            <p>
+              <b>Делегирование событий, глава 1.3</b>
+            </p>
+            <div id="container1">
+              <div class="hidden__block1">
+                <button class="block__btn1">X</button>
+                <h3 class="block__title">Текст, который нужно спрятать</h3>
+                <p class="block__text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam aperiam debitis dolorem dignissimos fugiat architecto vitae perspiciatis assumenda harum maiores, laboriosam impedit illum sunt temporibus libero provident, consectetur, magni tempore.</p>
+              </div>
+            </div>
+            <p>
+              <b>Создайте дерево, которое по клику на заголовок скрывает-показывает потомков.</b>
+            </p>
+            <ul class="tree" id="tree">
+              <li><b>Животные</b>
+                <ul>
+                  <li>Млекопитающие
+                    <ul>
+                      <li>Коровы</li>
+                      <li>Ослы</li>
+                      <li>Собаки</li>
+                      <li>Тигры</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li><b>Рыбы</b>
+                <ul>
+                  <li>Аквариумные
+                    <ul>
+                      <li>Гуппи</li>
+                      <li>Скалярии</li>
+                    </ul>
+                  </li>
+                  <li>Морские
+                    <ul>
+                      <li>Морская форель</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <p>
+              <b>Сделать таблицу сортируемой: при клике на элемент &ltth&gt строки таблицы должны сортироваться по соответствующему столбцу.</b>
+            </p>
+            <table id="grid">
+              <thead>
+                <tr>
+                  <th data-type="number">Возраст</th>
+                  <th data-type="string">Имя</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>5</td>
+                  <td>Вася</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Петя</td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>Женя</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Маша</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>Илья</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              <b>Напишите JS-код, реализующий поведение «подсказка». При наведении мыши на элемент с атрибутом data-tooltip, над ним должна показываться подсказка и скрываться при переходе на другой элемент.</b>
+            </p>
+            <button class="tool" data-tooltip="Кнопка не активна от слова - совсем">Короткая кнопка</button>
+          </div>
+          <div class="block">
+            <p>
+              <b>Действия браузера по умолчанию, глава 1.4</b>
+            </p>
+            <p>
+              <b>Почему в коде ниже return false не работает?</b><br/><br/>
+                function handler() {<br/>
+                  alert( "..." );<br/>
+                  return false;<br/>
+                }
+              &lta&gt href="https://w3.org" onclick="handler()"&gtбраузер откроет w3.org&lt/a&gt
+            </p>
+            <p>
+              for (let li of document.querySelectorAll('li')) { // перебираем<br/>
+                let title = li.firstChild.data; // смотрим название<br/>
+                let count = li.getElementsByTagName('li').length;// смотрим количество потомков<br/>
+              }
+            </p>
+            <p>
+              <b>Сделайте так, чтобы при клике на ссылки внутри элемента id="contents" пользователю выводился вопрос о том, действительно ли он хочет покинуть страницу, и если он не хочет, то прерывать переход по ссылке.</b><br/><br/>
+            </p>
+            <div id="contents3">
+              <a href="https://anime-characters-fight.fandom.com/ru/wiki/%D0%9F%D0%B8%D1%82%D0%B5%D1%80_%D0%93%D1%80%D0%B8%D1%84%D1%84%D0%B8%D0%BD#II_E">Ссылка внутри элемента id="contents"</a><br/><br/>
+            </div>
+            <p>
+              <b>Создайте галерею изображений, в которой основное изображение изменяется при клике на уменьшенный вариант.</b>
+            </p>
+            <p><img id="largeImg" src="https://en.js.cx/gallery/img1-lg.jpg" alt="Image 2"></p>
+            <ul id="thumbs">
+              <li>
+                <a href="https://en.js.cx/gallery/img2-lg.jpg" title="Image 2"><img src="https://en.js.cx/gallery/img2-thumb.jpg"></a>
+              </li>
+              <li>
+                <a href="https://en.js.cx/gallery/img3-lg.jpg" title="Image 3"><img src="https://en.js.cx/gallery/img3-thumb.jpg"></a>
+              </li>
+              <li>
+                <a href="https://en.js.cx/gallery/img4-lg.jpg" title="Image 4"><img src="https://en.js.cx/gallery/img4-thumb.jpg"></a>
+              </li>
+              <li>
+                <a href="https://en.js.cx/gallery/img5-lg.jpg" title="Image 5"><img src="https://en.js.cx/gallery/img5-thumb.jpg"></a>
+              </li>
+              <li>
+                <a href="https://en.js.cx/gallery/img6-lg.jpg" title="Image 6"><img src="https://en.js.cx/gallery/img6-thumb.jpg"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter">
+      <div>
+        <h1>Формы, элементы управления</h1>
+      </div>
+      <div class="content">
+        <div class="blocks">
+          <div class="block">
+            <p>
+              <b>Свойства и методы формы, глава 1.1</b>
+            </p>
+            <p>
+              Имеется &ltselect&gt:<br/><br/>
+                &ltselect id="genres"&gt<br/>
+                  &ltoption value="rock"&gtРок&lt/option&gt<br/>
+                  &ltoption value="blues" selected&gtБлюз&lt/option&gt<br/>
+                &lt/select&gt<br/><br/>
+                <b>Используя JavaScript:</b>
+                <ol>
+                  <li>Выведите значение и текст выбранного пункта.</li>
+                  <li>Добавьте пункт: <option value="classic">Классика</option>.</li>
+                  <li>Сделайте его выбранным.</li>
+                </ol>
+            </p>
+            <ol>
+              <li>console.log(`value=${genres.value} `+` text=${genres.options[genres.selectedIndex].text}`);</li>
+              <li>let option = new Option("Классика", "classic");</li>
+              <li>genres.prepend(option);	
+                option.selected = true;	</li>
+            </ol>
+          </div>
+          <div class="block">
+            <p>
+              <b>Фокусировка: focus/blur, глава 1.2</b>
+            </p>
+            <p>
+              <b>Создайте &ltdiv&gt, который превращается в &lttextarea&gt, если на него кликнуть. &lttextarea&gt позволяет редактировать HTML в элементе &ltdiv&gt. Когда пользователь нажимает Enter или переводит фокус, &lttextarea&gt превращается обратно в &ltdiv&gt, и его содержимое становится HTML-кодом в &ltdiv&gt.</b>
+            </p>
+            <div id="view" class="view">Кликни на меня</div>
+            <p>
+              <b>Сделайте ячейки таблицы редактируемыми по клику.</b>
+            </p>
+            <table id="bagua-table">
+              <tr>
+                <th colspan="3">Квадрат <em>Bagua</em>: Направление, Элемент, Цвет, Значение</th>
+              </tr>
+              <tr>
+                <td class="nw"><strong>Северо-Запад</strong>
+                  <br>Металл
+                  <br>Серебро
+                  <br>Старейшины
+                </td>
+                <td class="n"><strong>Север</strong>
+                  <br>Вода
+                  <br>Синий
+                  <br>Перемены
+                </td>
+                <td class="ne"><strong>Северо-Восток</strong>
+                  <br>Земля
+                  <br>Жёлтый
+                  <br>Направление
+                </td>
+              </tr>
+              <tr>
+                <td class="w"><strong>Запад</strong>
+                  <br>Металл
+                  <br>Золото
+                  <br>Молодость
+                </td>
+                <td class="c"><strong>Центр</strong>
+                  <br>Всё
+                  <br>Пурпурный
+                  <br>Гармония
+                </td>
+                <td class="e"><strong>Восток</strong>
+                  <br>Дерево
+                  <br>Синий
+                  <br>Будущее
+                </td>
+              </tr>
+              <tr>
+                <td class="sw"><strong>Юго-Запад</strong>
+                  <br>Земля
+                  <br>Коричневый
+                  <br>Спокойствие
+                </td>
+                <td class="s"><strong>Юг</strong>
+                  <br>Огонь
+                  <br>Оранжевый
+                  <br>Слава
+                </td>
+                <td class="se"><strong>Юго-Восток</strong>
+                  <br>Дерево
+                  <br>Зеленый
+                  <br>Роман
+                </td>
+              </tr>
+            </table>
+            <p>
+              <b>Установите фокус на мышь. Затем используйте клавиши со стрелками, чтобы её двигать</b>
+            </p>
+            <pre id="mouse">
+              _   _
+             (q\_/p)
+              /. .\
+             =\_t_/=   __
+              /   \   (
+             ((   ))   )
+             /\) (/\  /
+             \  Y  /-'
+              nn^nn
+             </pre>
+          </div>
+
+          <div class="block">
+            <p>
+              <b>События: change, input, cut, copy, paste, глава 1.3</b>
+            </p>
+            <p>
+              <b>Создайте интерфейс, позволяющий ввести сумму банковского вклада и процент, а затем рассчитать, какая это будет сумма через заданный промежуток времени.</b><br/><br/>
+            </p>
+            <form name="calculator">
+              <table>
+                <tr>
+                  <td>Первоначальный депозит</td>
+                  <td>
+                    <input name="money" type="number" value="10000" required>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Срок вклада?</td>
+                  <td>
+                    <select name="months">
+                      <option value="3">3 (минимум)</option>
+                      <option value="6">6 (полгода)</option>
+                      <option value="12" selected>12 (год)</option>
+                      <option value="18">18 (1.5 года)</option>
+                      <option value="24">24 (2 года)</option>
+                      <option value="30">30 (2.5 года)</option>
+                      <option value="36">36 (3 года)</option>
+                      <option value="60">60 (5 лет)</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Годовая процентная ставка?</td>
+                  <td>
+                    <input name="interest" type="number" value="5" required>
+                  </td>
+                </tr>
+              </table>
+            </form>
+            <table id="diagram">
+              <tr>
+                <th>Было:</th>
+                <th>Станет:</th>
+              </tr>
+              <tr>
+                <th id="money-before"></th>
+                <th id="money-after"></th>
+              </tr>
+              <td>
+                <div style="background: red;width:40px;height:100px"></div>
+              </td>
+              <td>
+                <div style="background: blue;width:40px;height:100px" id="height-after"></div>
+              </td>
+            </table>
+          </div>
+          <!-- <div class="block">
+            <p>
+              <b>Отправка формы: событие и метод submit, глава 1.4</b>
+            </p>
+            <p>
+              <b>Создайте функцию showPrompt(html, callback), которая выводит форму с сообщением (html), полем ввода и кнопками OK/ОТМЕНА.</b><br/><br/>
+            </p>
+            <ul>
+              <li>Пользователь должен ввести что-то в текстовое поле и нажать Enter или кнопку «OK», после чего должна вызываться функция callback(value) со значением поля.</li>
+              <li>Если пользователь нажимает Esc или кнопку «ОТМЕНА», тогда вызывается callback(null).</li>
+            </ul><br/><br/>
+            <p>
+              <b>Требования:</b><br/><br/>
+            </p>
+            <ul>
+              <li>Форма должна быть в центре окна.</li>
+              <li>Форма является модальным окном, это значит, что никакое взаимодействие с остальной частью страницы невозможно, пока пользователь не закроет его.</li>
+              <li>При показе формы, фокус должен находиться сразу внутри &ltinput&gt.</li>
+              <li>Клавиши Tab/Shift+Tab должны переключать фокус между полями формы, не позволяя ему переходить к другим элементам страницы.</li>
+            </ul><br/><br/>
+
+            <button class="but">Форма</button>
+            <div class="modal">
+              <div class="form_container">
+                <form class="form">
+                  <div class="prompt-message">
+                    Введите что-нибудь...
+                  </div>
+                  <input name="text" type="text" />
+                  <input type="submit" value="Ok" />
+                  <input type="button" name="cancel" value="Отмена" />
+                </form>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter">
+      <div>
+        <h1>Сетевые запросы</h1>
+      </div>
+      <div class="content">
+        <div class="blocks">
+          <div class="block">
+            <p>
+              <b>Fetch, глава 1.1</b>
+            </p>
+            <p>
+              <b>Создайте асинхронную функцию getUsers(names), которая получает на вход массив логинов пользователей GitHub, запрашивает у GitHub информацию о них и возвращает массив объектов-пользователей.</b><br/><br/>
+            </p>
+            <div class="specialist">
+              <div class="title">
+                <h3>Найдём специалиста</h3>
+              </div>
+              <form id="gitHubForm" class="form-inline">
+                <input id="usernameInput" class="form-control" type="text" name="username" placeholder="GitHub Username">
+                <input type="submit" class="btn btn-primary" value="Поиск">
+              </form>
+              <div class="repo">
+                <ul id="userRepos" class="list-group"></ul>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <p>
+              <b>Fetch: запросы на другие сайты, глава 1.5</b>
+            </p>
+            <p>
+              <b>Почему нужен Origin, если Referer содержит даже больше информации? Возможно ли отсутствие Referer или Origin, или это неправильно?</b>
+            </p>
+            <p>
+              Referer может отсутствовать, Origin же обязателен, поэтому нам и нужен сам Origin.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/functionPlus/6_8.js"></script>
+  <script src="/prototype/8_1.js"></script>
+  <script src="/prototype/8_2.js"></script>
+  <script src="/prototype/8_4.js"></script>
+  <script src="/document/1_5.js"></script>
+  <script src="/document/1_7.js"></script>
+  <script>setInterval(time, 1000);</script>
+  <script src="/document/1_8.js"></script>
+  <script src="/document/1_11.js"></script>
+  <script src="/events/1_1.js"></script>
+  <script src="/events/1_3.js"></script>
+  <script src="/events/1_4.js"></script>
+  <script src="/forms/1_2.js"></script>
+  <script src="/forms/1_3.js"></script>
+  <script src="/forms/1_4.js"></script>
+  <script src="/fetch/1_1.js"></script>
+</body>
+</html>
